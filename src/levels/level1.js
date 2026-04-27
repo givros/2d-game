@@ -22,12 +22,12 @@
         [2624, 302], [2820, 302], [2944, 262], [3010, 252], [3076, 262], [3405, 302],
       ],
       enemies: [
-        { x: 575, y: GROUND_Y - 22, min: 510, max: 770, speed: 42, dir: 1 },
-        { x: 1050, y: GROUND_Y - 22, min: 960, max: 1245, speed: 54, dir: -1 },
-        { x: 1565, y: GROUND_Y - 22, min: 1460, max: 1700, speed: 46, dir: 1 },
-        { x: 2165, y: GROUND_Y - 22, min: 2050, max: 2350, speed: 58, dir: -1 },
-        { x: 2755, y: GROUND_Y - 22, min: 2655, max: 2960, speed: 54, dir: 1 },
-        { x: 3230, y: GROUND_Y - 22, min: 3110, max: 3440, speed: 64, dir: -1 },
+        { x: 575, min: 510, max: 770, speed: 42, dir: 1 },
+        { x: 1050, min: 960, max: 1245, speed: 54, dir: -1 },
+        { x: 1565, min: 1460, max: 1700, speed: 46, dir: 1 },
+        { x: 2165, min: 2050, max: 2350, speed: 58, dir: -1 },
+        { x: 2755, min: 2655, max: 2960, speed: 54, dir: 1 },
+        { x: 3230, min: 3110, max: 3440, speed: 64, dir: -1 },
       ],
       hazards: [
         { x: 910, y: GROUND_Y - 10, w: 66, h: 10, phase: 0.2 },

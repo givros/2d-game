@@ -34,7 +34,7 @@ test("captures the new run cycle in motion", async ({ page }) => {
   });
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-13");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-14");
   await page.getByRole("button", { name: "START" }).click();
   await page.waitForTimeout(3300);
   await page.waitForTimeout(500);

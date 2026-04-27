@@ -86,6 +86,7 @@
   }
 
   const levelTemplates = window.GivrosLevels.createLevelTemplates({ GROUND_Y, WORLD_W });
+  const enemyProfiles = window.GivrosEnemies.createEnemyProfiles();
 
   let activeLevelIndex = 0;
 
@@ -95,6 +96,10 @@
 
   function coinTotal() {
     return currentLevelTemplate().coins.length;
+  }
+
+  function enemyProfile(kind) {
+    return enemyProfiles[kind] || enemyProfiles.rat;
   }
 
   function cloneLevel() {
@@ -109,20 +114,24 @@
         taken: false,
         bob: index * 0.37,
       })),
-      enemies: template.enemies.map((enemy, index) => ({
-        id: index,
-        kind: enemy.kind || template.enemyKind,
-        x: enemy.x,
-        y: enemy.y,
-        w: enemy.w || 42,
-        h: enemy.h || 22,
-        min: enemy.min,
-        max: enemy.max,
-        speed: enemy.speed,
-        dir: enemy.dir,
-        alive: true,
-        defeatTime: 0,
-      })),
+      enemies: template.enemies.map((enemy, index) => {
+        const kind = enemy.kind || template.enemyKind;
+        const profile = enemyProfile(kind);
+        return {
+          id: index,
+          kind,
+          x: enemy.x,
+          y: enemy.y ?? GROUND_Y - profile.hitbox.h,
+          w: enemy.w ?? profile.hitbox.w,
+          h: enemy.h ?? profile.hitbox.h,
+          min: enemy.min,
+          max: enemy.max,
+          speed: enemy.speed,
+          dir: enemy.dir,
+          alive: true,
+          defeatTime: 0,
+        };
+      }),
       hazards: template.hazards.map((hazard) => ({ ...hazard })),
     };
   }
@@ -142,7 +151,7 @@
 
   const sprites = buildSprites();
   const generatedAssets = window.GivrosAssets.createGeneratedAssets(loadGeneratedImage);
-  window.__GIVROS_BUILD = "gpt-assets-20260427-13";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-14";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -1558,21 +1567,22 @@
     if (!isDrawableImage(asset.image)) {
       return false;
     }
+    const render = enemyProfile(enemy.kind).render;
     const sourceW = 384;
     const sourceH = 225;
-    const destW = enemy.alive ? 70 : 64;
-    const destH = enemy.alive ? 42 : 36;
+    const destW = enemy.alive ? render.aliveW : render.deadW;
+    const destH = enemy.alive ? render.aliveH : render.deadH;
     return drawGeneratedFrame(
       asset.image,
       frame * sourceW,
       0,
       sourceW,
       sourceH,
-      x - 15,
-      enemy.y - 20,
+      x + render.offsetX,
+      enemy.y + (enemy.alive ? render.offsetY : render.deadOffsetY),
       destW,
       destH,
-      enemy.dir > 0,
+      shouldFlipEnemy(enemy),
     );
   }
 
@@ -1587,20 +1597,26 @@
       [875, 790, 330, 330],
     ];
     const source = frames[frame] || frames[0];
-    const destW = enemy.alive ? 78 : 72;
-    const destH = enemy.alive ? 78 : 58;
+    const render = enemyProfile(enemy.kind).render;
+    const destW = enemy.alive ? render.aliveW : render.deadW;
+    const destH = enemy.alive ? render.aliveH : render.deadH;
     return drawGeneratedFrame(
       asset.image,
       source[0],
       source[1],
       source[2],
       source[3],
-      x - 18,
-      enemy.alive ? enemy.y - 29 : enemy.y - 6,
+      x + render.offsetX,
+      enemy.y + (enemy.alive ? render.offsetY : render.deadOffsetY),
       destW,
       destH,
-      enemy.dir > 0,
+      shouldFlipEnemy(enemy),
     );
+  }
+
+  function shouldFlipEnemy(enemy) {
+    const profile = enemyProfile(enemy.kind);
+    return profile.sourceFaces === "left" ? enemy.dir > 0 : enemy.dir < 0;
   }
 
   function drawEnemies(cameraX, generatedScene) {
@@ -1613,9 +1629,16 @@
         continue;
       }
       const frame = enemy.alive ? Math.floor(state.elapsed * 7 + enemy.id) % 2 : 2;
-      const isPlant = enemy.kind === "plant";
-      drawGroundShadow(x + 21, enemy.y + (isPlant ? 47 : 25), isPlant ? 42 : enemy.alive ? 36 : 26, 6, 0.28);
-      const drewEnemy = isPlant
+      const profile = enemyProfile(enemy.kind);
+      const shadowW = enemy.alive ? profile.shadow.aliveW : profile.shadow.deadW;
+      drawGroundShadow(
+        x + profile.shadow.offsetX,
+        enemy.y + profile.shadow.offsetY,
+        shadowW,
+        profile.shadow.h,
+        profile.shadow.alpha,
+      );
+      const drewEnemy = enemy.kind === "plant"
         ? drawGeneratedPlantMonster(enemy, x, enemy.alive ? frame : 2)
         : drawGeneratedRat(enemy, x, enemy.alive ? frame : 3);
       if (!drewEnemy) {

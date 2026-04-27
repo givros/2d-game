@@ -22,11 +22,11 @@
         [2608, 302], [2818, 302], [2915, 252], [3002, 238], [3090, 252], [3418, 302],
       ],
       enemies: [
-        { kind: "plant", x: 570, y: GROUND_Y - 46, w: 42, h: 44, min: 500, max: 760, speed: 38, dir: 1 },
-        { kind: "plant", x: 1170, y: GROUND_Y - 46, w: 42, h: 44, min: 1010, max: 1325, speed: 46, dir: -1 },
-        { kind: "plant", x: 1810, y: GROUND_Y - 46, w: 42, h: 44, min: 1660, max: 1945, speed: 42, dir: 1 },
-        { kind: "plant", x: 2500, y: GROUND_Y - 46, w: 42, h: 44, min: 2320, max: 2680, speed: 52, dir: -1 },
-        { kind: "plant", x: 3190, y: GROUND_Y - 46, w: 42, h: 44, min: 3020, max: 3400, speed: 50, dir: 1 },
+        { x: 570, min: 500, max: 760, speed: 38, dir: 1 },
+        { x: 1170, min: 1010, max: 1325, speed: 46, dir: -1 },
+        { x: 1810, min: 1660, max: 1945, speed: 42, dir: 1 },
+        { x: 2500, min: 2320, max: 2680, speed: 52, dir: -1 },
+        { x: 3190, min: 3020, max: 3400, speed: 50, dir: 1 },
       ],
       hazards: [
         { kind: "thorn", x: 875, y: GROUND_Y - 12, w: 74, h: 12, phase: 0.2 },
