@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Givros: Montpellier Run</title>
-    <link rel="stylesheet" href="src/styles.css?v=gpt-assets-20260427-6" />
+    <link rel="stylesheet" href="src/styles.css?v=gpt-assets-20260427-7" />
   </head>
   <body>
     <main id="game-shell">
@@ -61,18 +61,18 @@
         <button id="restart-button" class="pixel-button" type="button">START</button>
       </div>
 
-      <div class="touch-controls" aria-hidden="true">
+      <div class="touch-controls" aria-label="Mobile controls">
         <div class="touch-pad">
-          <button class="touch-button touch-left" data-control="left" type="button"></button>
-          <button class="touch-button touch-right" data-control="right" type="button"></button>
+          <button class="touch-button touch-left" data-control="left" type="button" aria-label="Move left"></button>
+          <button class="touch-button touch-right" data-control="right" type="button" aria-label="Move right"></button>
         </div>
         <div class="touch-actions">
-          <button class="touch-button touch-jump" data-control="jump" type="button"></button>
-          <button class="touch-button touch-attack" data-control="attack" type="button"></button>
+          <button class="touch-button touch-jump" data-control="jump" type="button" aria-label="Jump"></button>
+          <button class="touch-button touch-attack" data-control="attack" type="button" aria-label="Action"></button>
         </div>
       </div>
     </main>
 
-    <script src="src/game.js?v=gpt-assets-20260427-6" defer></script>
+    <script src="src/game.js?v=gpt-assets-20260427-7" defer></script>
   </body>
 </html>

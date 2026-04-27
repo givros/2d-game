@@ -24,7 +24,13 @@ function loadPlaywrightTest() {
 
 const { test, expect } = loadPlaywrightTest();
 
-test("keeps the finish gate hidden until every coin is collected", async ({ page }) => {
+test.use({
+  viewport: { width: 430, height: 932 },
+  isMobile: true,
+  hasTouch: true,
+});
+
+test("mobile controls are visible and drive the player", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
@@ -35,21 +41,36 @@ test("keeps the finish gate hidden until every coin is collected", async ({ page
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
   await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-7");
-  await page.getByRole("button", { name: "START" }).click();
+
+  await expect(page.getByRole("button", { name: "Move left" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Move right" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Jump" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Action" })).toBeVisible();
+
+  await page.getByRole("button", { name: "START" }).tap();
   await page.waitForTimeout(3300);
-  await page.keyboard.down("ArrowRight");
-  await page.waitForTimeout(16500);
-  await page.keyboard.up("ArrowRight");
+
+  const right = page.getByRole("button", { name: "Move right" });
+  const rightBox = await right.boundingBox();
+  expect(rightBox).not.toBeNull();
+  await page.mouse.move(rightBox.x + rightBox.width / 2, rightBox.y + rightBox.height / 2);
+  await page.mouse.down();
+  await page.waitForTimeout(1500);
+  await page.mouse.up();
+
+  await page.getByRole("button", { name: "Jump" }).tap();
+  await page.waitForTimeout(300);
+
   const result = await page.evaluate(() => ({
     coins: document.getElementById("coin-count").textContent,
     time: document.getElementById("time-left").textContent,
     bannerHidden: document.getElementById("status-banner").classList.contains("hidden"),
   }));
-  const screenshot = await page.screenshot({ path: "output/playwright/finish-gate.png" });
+  const screenshot = await page.screenshot({ path: "output/playwright/mobile-controls.png" });
 
   expect(errors).toEqual([]);
   expect(screenshot.length).toBeGreaterThan(1000);
-  expect(result.coins).not.toBe("x24/24");
+  expect(result.coins).toMatch(/^x\d{2}\/24$/);
   expect(result.time).toMatch(/^\d{2}:\d{2}\.\d{2}$/);
   expect(result.bannerHidden).toBe(true);
 });

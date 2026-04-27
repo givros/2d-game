@@ -34,6 +34,7 @@ test("game renders and responds to input", async ({ page }) => {
   });
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-7");
   await page.getByRole("button", { name: "START" }).click();
   await page.waitForTimeout(3300);
   await page.waitForTimeout(500);

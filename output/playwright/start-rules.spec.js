@@ -26,7 +26,7 @@ const { test, expect } = loadPlaywrightTest();
 
 test("shows speedrun rules on the start panel", async ({ page }) => {
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-6");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-7");
 
   await expect(page.getByText("Speedrun challenge")).toBeVisible();
   await expect(page.getByText("Collect every coin")).toBeVisible();

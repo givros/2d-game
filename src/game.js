@@ -166,7 +166,7 @@
     atlas: loadGeneratedImage("assets/generated/promenade-atlas.png"),
     finishGate: loadGeneratedImage("assets/generated/montpellier-finish-gate.png"),
   };
-  window.__GIVROS_BUILD = "gpt-assets-20260427-6";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-7";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -200,19 +200,33 @@
     const control = button.dataset.control;
     const activate = (event) => {
       event.preventDefault();
+      button.setPointerCapture?.(event.pointerId);
       if (!touch[control]) {
         pressed.add("Touch" + control);
       }
       touch[control] = true;
+      button.classList.add("is-pressed");
     };
     const release = (event) => {
       event.preventDefault();
+      if (button.hasPointerCapture?.(event.pointerId)) {
+        button.releasePointerCapture(event.pointerId);
+      }
       touch[control] = false;
+      button.classList.remove("is-pressed");
     };
     button.addEventListener("pointerdown", activate);
     button.addEventListener("pointerup", release);
     button.addEventListener("pointercancel", release);
-    button.addEventListener("pointerleave", release);
+    button.addEventListener("lostpointercapture", release);
+    button.addEventListener("contextmenu", (event) => event.preventDefault());
+  });
+
+  window.addEventListener("blur", releaseTouchControls);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      releaseTouchControls();
+    }
   });
 
   restartButton.addEventListener("click", () => {
@@ -235,6 +249,15 @@
     const scale = integerScale >= 1 ? integerScale : fittedScale;
     gameShell.style.width = Math.max(1, Math.round(VIEW_W * scale)) + "px";
     gameShell.style.height = Math.max(1, Math.round(VIEW_H * scale)) + "px";
+  }
+
+  function releaseTouchControls() {
+    for (const control of Object.keys(touch)) {
+      touch[control] = false;
+    }
+    document.querySelectorAll(".touch-button.is-pressed").forEach((button) => {
+      button.classList.remove("is-pressed");
+    });
   }
 
   function resetGame(showStart) {
