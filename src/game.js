@@ -106,6 +106,7 @@
     const template = currentLevelTemplate();
     return {
       platforms: template.platforms.map((platform) => ({ ...platform })),
+      props: template.props.map((prop) => [...prop]),
       coins: template.coins.map(([x, y], index) => ({
         id: index,
         x,
@@ -151,7 +152,7 @@
 
   const sprites = buildSprites();
   const generatedAssets = window.GivrosAssets.createGeneratedAssets(loadGeneratedImage);
-  window.__GIVROS_BUILD = "gpt-assets-20260427-14";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-15";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -692,29 +693,7 @@
   }
 
   function drawGeneratedForegroundProps(cameraX) {
-    const props = activeLevelIndex === 1 ? [
-      ["jardinPergola", 42, GROUND_Y - 132, 170, 132],
-      ["jardinLamp", 330, GROUND_Y - 176, 86, 174],
-      ["jardinBench", 730, GROUND_Y - 42, 150, 40],
-      ["jardinFountain", 1395, GROUND_Y - 120, 146, 118],
-      ["jardinCypress", 1975, GROUND_Y - 202, 82, 202],
-      ["jardinPalm", 2470, GROUND_Y - 210, 125, 210],
-      ["jardinRailing", 2810, GROUND_Y - 112, 190, 108],
-      ["jardinPlanter", 3270, GROUND_Y - 65, 112, 63],
-    ] : [
-      ["banner", 58, GROUND_Y - 168, 130, 166],
-      ["planter", 52, GROUND_Y - 58, 104, 54],
-      ["planter", 192, GROUND_Y - 58, 104, 54],
-      ["trash", 2218, GROUND_Y - 78, 45, 76],
-      ["railing", 2288, GROUND_Y - 84, 210, 80],
-      ["planter", 2628, GROUND_Y - 58, 104, 54],
-      ["bollard", 2798, GROUND_Y - 52, 34, 52],
-      ["bollard", 2862, GROUND_Y - 52, 34, 52],
-      ["bollard", 2926, GROUND_Y - 52, 34, 52],
-      ["banner", 3446, GROUND_Y - 168, 130, 166],
-    ];
-
-    for (const [name, worldX, y, w, h] of props) {
+    for (const [name, worldX, y, w, h] of state.level.props) {
       const x = Math.round(worldX - cameraX);
       if (x > VIEW_W + 120 || x + w < -120) {
         continue;
@@ -1783,9 +1762,9 @@
   function drawFinishGate(x, y) {
     const asset = activeLevelIndex === 1 ? generatedAssets.level2Atlas : generatedAssets.finishGate;
     const sx = Math.round(x);
-    const sy = Math.round(activeLevelIndex === 1 ? GROUND_Y - 166 : y);
     const w = activeLevelIndex === 1 ? 132 : 216;
     const h = activeLevelIndex === 1 ? 166 : 183;
+    const sy = Math.round(activeLevelIndex === 1 ? GROUND_Y - h + 9 : y);
     if (sx < -w - 20 || sx > VIEW_W + 20) {
       return;
     }
