@@ -165,7 +165,7 @@
     atlas: loadGeneratedImage("assets/generated/promenade-atlas.png"),
     finishGate: loadGeneratedImage("assets/generated/montpellier-finish-gate.png"),
   };
-  window.__GIVROS_BUILD = "gpt-assets-20260427-9";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-10";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -235,20 +235,33 @@
     }
     resetGame(true);
   });
-  window.addEventListener("resize", fitGameShell);
+  window.addEventListener("resize", queueFitGameShell);
+  window.addEventListener("orientationchange", queueFitGameShell);
+  window.visualViewport?.addEventListener("resize", queueFitGameShell);
+  window.visualViewport?.addEventListener("scroll", queueFitGameShell);
 
   requestAnimationFrame(loop);
 
   function fitGameShell() {
-    const viewport = window.visualViewport || window;
-    const viewportW = Math.max(1, Math.round(viewport.width || window.innerWidth));
-    const viewportH = Math.max(1, Math.round(viewport.height || window.innerHeight));
     if (window.matchMedia("(pointer: coarse)").matches) {
+      const viewportW = Math.max(1, Math.round(document.documentElement.clientWidth || window.innerWidth));
+      const viewportH = Math.max(1, Math.round(document.documentElement.clientHeight || window.innerHeight));
+      gameShell.style.position = "fixed";
+      gameShell.style.left = "0px";
+      gameShell.style.top = "0px";
       gameShell.style.width = viewportW + "px";
       gameShell.style.height = viewportH + "px";
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       return;
     }
 
+    gameShell.style.position = "";
+    gameShell.style.left = "";
+    gameShell.style.top = "";
+    const viewportW = Math.max(1, Math.round(window.innerWidth));
+    const viewportH = Math.max(1, Math.round(window.innerHeight));
     const borderBudget = 8;
     const availableW = Math.max(1, viewportW - borderBudget);
     const availableH = Math.max(1, viewportH - borderBudget);
@@ -257,6 +270,13 @@
     const scale = integerScale >= 1 ? integerScale : fittedScale;
     gameShell.style.width = Math.max(1, Math.round(VIEW_W * scale)) + "px";
     gameShell.style.height = Math.max(1, Math.round(VIEW_H * scale)) + "px";
+  }
+
+  function queueFitGameShell() {
+    fitGameShell();
+    requestAnimationFrame(fitGameShell);
+    window.setTimeout(fitGameShell, 120);
+    window.setTimeout(fitGameShell, 320);
   }
 
   function releaseTouchControls() {

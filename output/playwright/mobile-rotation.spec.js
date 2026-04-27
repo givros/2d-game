@@ -25,27 +25,42 @@ function loadPlaywrightTest() {
 const { test, expect } = loadPlaywrightTest();
 
 test.use({
-  viewport: { width: 430, height: 932 },
+  viewport: { width: 932, height: 430 },
   isMobile: true,
   hasTouch: true,
 });
 
-test("asks portrait mobile players to rotate to landscape", async ({ page }) => {
+test("stays pinned after repeated mobile rotations", async ({ page }) => {
   await page.goto("file:///E:/Dev/2d-game/index.html");
   await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-10");
 
-  await expect(page.getByText("ROTATE YOUR PHONE")).toBeVisible();
-  await expect(page.getByText("Landscape mode is required to play.")).toBeVisible();
+  for (const size of [
+    { width: 430, height: 932 },
+    { width: 932, height: 430 },
+    { width: 430, height: 932 },
+    { width: 932, height: 430 },
+  ]) {
+    await page.setViewportSize(size);
+    await page.waitForTimeout(450);
+    const shell = await page.evaluate(() => {
+      const rect = document.getElementById("game-shell").getBoundingClientRect();
+      return {
+        left: Math.round(rect.left),
+        top: Math.round(rect.top),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        scrollX: Math.round(window.scrollX),
+        scrollY: Math.round(window.scrollY),
+      };
+    });
+    expect(shell.left).toBe(0);
+    expect(shell.top).toBe(0);
+    expect(shell.width).toBe(size.width);
+    expect(shell.height).toBe(size.height);
+    expect(shell.scrollX).toBe(0);
+    expect(shell.scrollY).toBe(0);
+  }
 
-  const shell = await page.evaluate(() => {
-    const rect = document.getElementById("game-shell").getBoundingClientRect();
-    return { left: Math.round(rect.left), top: Math.round(rect.top), width: Math.round(rect.width), height: Math.round(rect.height) };
-  });
-  expect(shell.left).toBe(0);
-  expect(shell.top).toBe(0);
-  expect(shell.width).toBe(430);
-  expect(shell.height).toBe(932);
-
-  const screenshot = await page.screenshot({ path: "output/playwright/portrait-warning.png" });
+  const screenshot = await page.screenshot({ path: "output/playwright/mobile-rotation-final.png" });
   expect(screenshot.length).toBeGreaterThan(1000);
 });

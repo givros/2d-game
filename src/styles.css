@@ -540,6 +540,9 @@ button {
   }
 
   #game-shell {
+    position: fixed;
+    left: 0;
+    top: 0;
     width: 100vw;
     width: 100dvw;
     height: 100vh;
