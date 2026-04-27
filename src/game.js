@@ -152,7 +152,7 @@
 
   const sprites = buildSprites();
   const generatedAssets = window.GivrosAssets.createGeneratedAssets(loadGeneratedImage);
-  window.__GIVROS_BUILD = "gpt-assets-20260427-15";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-16";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -714,7 +714,6 @@
       jardinFountain: [780, 575, 280, 220],
       jardinCypress: [1118, 150, 140, 430],
       jardinPalm: [1260, 160, 250, 430],
-      jardinRailing: [750, 170, 285, 135],
       jardinPlanter: [290, 648, 240, 100],
     } : {
       banner: [36, 458, 256, 300],

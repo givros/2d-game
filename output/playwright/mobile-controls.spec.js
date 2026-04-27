@@ -40,7 +40,7 @@ test("mobile controls are visible and drive the player", async ({ page }) => {
   });
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-15");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-16");
 
   await expect(page.getByRole("button", { name: "Move left" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Move right" })).toBeVisible();

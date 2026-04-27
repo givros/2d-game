@@ -22,7 +22,6 @@
         ["jardinFountain", 1395, GROUND_Y - 120, 146, 118],
         ["jardinCypress", 1975, GROUND_Y - 202, 82, 202],
         ["jardinPalm", 2470, GROUND_Y - 210, 125, 210],
-        ["jardinRailing", 2810, GROUND_Y - 112, 190, 108],
         ["jardinPlanter", 3325, GROUND_Y - 65, 112, 63],
       ],
       coins: [
