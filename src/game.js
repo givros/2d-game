@@ -165,7 +165,7 @@
     atlas: loadGeneratedImage("assets/generated/promenade-atlas.png"),
     finishGate: loadGeneratedImage("assets/generated/montpellier-finish-gate.png"),
   };
-  window.__GIVROS_BUILD = "gpt-assets-20260427-8";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-9";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -240,9 +240,18 @@
   requestAnimationFrame(loop);
 
   function fitGameShell() {
+    const viewport = window.visualViewport || window;
+    const viewportW = Math.max(1, Math.round(viewport.width || window.innerWidth));
+    const viewportH = Math.max(1, Math.round(viewport.height || window.innerHeight));
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      gameShell.style.width = viewportW + "px";
+      gameShell.style.height = viewportH + "px";
+      return;
+    }
+
     const borderBudget = 8;
-    const availableW = Math.max(1, window.innerWidth - borderBudget);
-    const availableH = Math.max(1, window.innerHeight - borderBudget);
+    const availableW = Math.max(1, viewportW - borderBudget);
+    const availableH = Math.max(1, viewportH - borderBudget);
     const fittedScale = Math.min(availableW / VIEW_W, availableH / VIEW_H);
     const integerScale = Math.floor(fittedScale);
     const scale = integerScale >= 1 ? integerScale : fittedScale;

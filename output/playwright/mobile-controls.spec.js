@@ -40,7 +40,7 @@ test("mobile controls are visible and drive the player", async ({ page }) => {
   });
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-8");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-9");
 
   await expect(page.getByRole("button", { name: "Move left" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Move right" })).toBeVisible();
@@ -65,6 +65,10 @@ test("mobile controls are visible and drive the player", async ({ page }) => {
     coins: document.getElementById("coin-count").textContent,
     time: document.getElementById("time-left").textContent,
     bannerHidden: document.getElementById("status-banner").classList.contains("hidden"),
+    shell: {
+      width: Math.round(document.getElementById("game-shell").getBoundingClientRect().width),
+      height: Math.round(document.getElementById("game-shell").getBoundingClientRect().height),
+    },
   }));
   const screenshot = await page.screenshot({ path: "output/playwright/mobile-controls.png" });
 
@@ -73,4 +77,6 @@ test("mobile controls are visible and drive the player", async ({ page }) => {
   expect(result.coins).toMatch(/^x\d{2}\/24$/);
   expect(result.time).toMatch(/^\d{2}:\d{2}\.\d{2}$/);
   expect(result.bannerHidden).toBe(true);
+  expect(result.shell.width).toBe(932);
+  expect(result.shell.height).toBe(430);
 });

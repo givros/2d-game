@@ -534,6 +534,27 @@ button {
   }
 }
 
+@media (pointer: coarse) {
+  body {
+    place-items: stretch;
+  }
+
+  #game-shell {
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  #game-shell::after {
+    box-shadow: inset 0 0 0 3px rgba(255, 214, 92, 0.24);
+  }
+}
+
 .orientation-warning {
   position: absolute;
   inset: 0;

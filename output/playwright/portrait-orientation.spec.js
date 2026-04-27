@@ -32,10 +32,17 @@ test.use({
 
 test("asks portrait mobile players to rotate to landscape", async ({ page }) => {
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-8");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-9");
 
   await expect(page.getByText("ROTATE YOUR PHONE")).toBeVisible();
   await expect(page.getByText("Landscape mode is required to play.")).toBeVisible();
+
+  const shell = await page.evaluate(() => {
+    const rect = document.getElementById("game-shell").getBoundingClientRect();
+    return { width: Math.round(rect.width), height: Math.round(rect.height) };
+  });
+  expect(shell.width).toBe(430);
+  expect(shell.height).toBe(932);
 
   const screenshot = await page.screenshot({ path: "output/playwright/portrait-warning.png" });
   expect(screenshot.length).toBeGreaterThan(1000);
