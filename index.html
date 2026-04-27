@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Givros: Montpellier Run</title>
+    <link rel="stylesheet" href="src/styles.css?v=gpt-assets-20260427-6" />
+  </head>
+  <body>
+    <main id="game-shell">
+      <canvas id="game" width="768" height="432" aria-label="Givros side-scrolling pixel game"></canvas>
+
+      <div class="hud" aria-live="polite">
+        <section class="player-panel">
+          <canvas id="portrait" width="58" height="58" aria-hidden="true"></canvas>
+          <div class="player-readout">
+            <div class="player-name">Givros</div>
+            <div id="hearts" class="hearts" aria-label="health"></div>
+            <div class="energy-track" aria-label="energy">
+              <span id="energy-bar"></span>
+            </div>
+            <div class="coin-readout">
+              <span class="coin-icon" aria-hidden="true"></span>
+              <span id="coin-count">x00</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="timer-panel">
+          <div class="hud-label">TIME</div>
+          <div class="timer-line">
+            <span class="clock-icon" aria-hidden="true"></span>
+            <span id="time-left">298</span>
+          </div>
+        </section>
+
+        <section class="score-panel">
+          <div class="hud-label">SCORE</div>
+          <div id="score-value">0000000</div>
+        </section>
+
+        <section class="mini-map" aria-label="level progress">
+          <div class="map-sky"></div>
+          <div class="map-route"></div>
+          <div class="map-arch"></div>
+          <div id="map-marker"></div>
+        </section>
+      </div>
+
+      <div id="status-banner" class="status-banner hidden">
+        <div id="status-title">MONTPELLIER RUN</div>
+        <div id="status-subtitle">
+          <div class="start-rules">
+            <p>Speedrun challenge: finish as fast as possible.</p>
+            <p>Collect every coin. The gate appears only at 24/24.</p>
+            <p>Damage penalty: +1s.</p>
+            <p>Move: Arrows / A D</p>
+            <p>Jump: Space / W / Up</p>
+          </div>
+        </div>
+        <button id="restart-button" class="pixel-button" type="button">START</button>
+      </div>
+
+      <div class="touch-controls" aria-hidden="true">
+        <div class="touch-pad">
+          <button class="touch-button touch-left" data-control="left" type="button"></button>
+          <button class="touch-button touch-right" data-control="right" type="button"></button>
+        </div>
+        <div class="touch-actions">
+          <button class="touch-button touch-jump" data-control="jump" type="button"></button>
+          <button class="touch-button touch-attack" data-control="attack" type="button"></button>
+        </div>
+      </div>
+    </main>
+
+    <script src="src/game.js?v=gpt-assets-20260427-6" defer></script>
+  </body>
+</html>

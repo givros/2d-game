@@ -1,0 +1,6 @@
+tmp/
+test-results/
+output/playwright/*.png
+node_modules/
+.env
+.DS_Store
