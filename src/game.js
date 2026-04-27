@@ -142,7 +142,7 @@
 
   const sprites = buildSprites();
   const generatedAssets = window.GivrosAssets.createGeneratedAssets(loadGeneratedImage);
-  window.__GIVROS_BUILD = "gpt-assets-20260427-12";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-13";
   fitGameShell();
   showStartScreen();
   drawPortrait();
