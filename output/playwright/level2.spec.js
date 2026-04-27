@@ -24,7 +24,7 @@ function loadPlaywrightTest() {
 
 const { test, expect } = loadPlaywrightTest();
 
-test("captures the new run cycle in motion", async ({ page }) => {
+test("loads the Jardin des plantes second level", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
@@ -35,13 +35,25 @@ test("captures the new run cycle in motion", async ({ page }) => {
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
   await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-11");
+  await page.evaluate(() => document.getElementById("next-level-button").click());
+
+  await expect(page.getByText("JARDIN DES PLANTES")).toBeVisible();
   await page.getByRole("button", { name: "START" }).click();
   await page.waitForTimeout(3300);
-  await page.waitForTimeout(500);
   await page.keyboard.down("ArrowRight");
-  await page.waitForTimeout(850);
-  await page.screenshot({ path: "output/playwright/run-cycle-active.png" });
+  await page.waitForTimeout(1200);
   await page.keyboard.up("ArrowRight");
 
+  const result = await page.evaluate(() => ({
+    coins: document.getElementById("coin-count").textContent,
+    time: document.getElementById("time-left").textContent,
+    bannerHidden: document.getElementById("status-banner").classList.contains("hidden"),
+  }));
+  const screenshot = await page.screenshot({ path: "output/playwright/level2-jardin.png" });
+
   expect(errors).toEqual([]);
+  expect(screenshot.length).toBeGreaterThan(1000);
+  expect(result.coins).toMatch(/^x\d{2}\/24$/);
+  expect(result.time).toMatch(/^\d{2}:\d{2}\.\d{2}$/);
+  expect(result.bannerHidden).toBe(true);
 });

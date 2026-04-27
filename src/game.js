@@ -17,6 +17,7 @@
   const statusTitle = document.getElementById("status-title");
   const statusSubtitle = document.getElementById("status-subtitle");
   const restartButton = document.getElementById("restart-button");
+  const nextLevelButton = document.getElementById("next-level-button");
 
   const VIEW_W = 768;
   const VIEW_H = 432;
@@ -28,7 +29,6 @@
   const GRAVITY = 1500;
   const MOVE_SPEED = 190;
   const JUMP_SPEED = -560;
-  const COIN_TOTAL = 24;
   const RUN_FRAME_SEQUENCE = [0, 2, 4, 6];
 
   ctx.imageSmoothingEnabled = false;
@@ -85,41 +85,91 @@
     };
   }
 
-  const levelTemplate = {
-    platforms: [
-      { x: 0, y: GROUND_Y, w: WORLD_W, h: 86, kind: "ground" },
-      { x: 670, y: 306, w: 150, h: 18, kind: "ledge" },
-      { x: 1188, y: 294, w: 180, h: 18, kind: "ledge" },
-      { x: 1760, y: 314, w: 118, h: 18, kind: "ledge" },
-      { x: 2280, y: 302, w: 166, h: 18, kind: "ledge" },
-      { x: 2910, y: 300, w: 190, h: 18, kind: "ledge" },
-    ],
-    coins: [
-      [248, 304], [374, 302], [520, 304], [690, 266], [746, 258], [805, 266],
-      [1012, 303], [1178, 256], [1241, 244], [1306, 256], [1510, 302], [1680, 302],
-      [1813, 276], [1994, 302], [2178, 302], [2306, 263], [2368, 255], [2432, 263],
-      [2624, 302], [2820, 302], [2944, 262], [3010, 252], [3076, 262], [3405, 302],
-    ],
-    enemies: [
-      { x: 575, y: GROUND_Y - 22, min: 510, max: 770, speed: 42, dir: 1 },
-      { x: 1050, y: GROUND_Y - 22, min: 960, max: 1245, speed: 54, dir: -1 },
-      { x: 1565, y: GROUND_Y - 22, min: 1460, max: 1700, speed: 46, dir: 1 },
-      { x: 2165, y: GROUND_Y - 22, min: 2050, max: 2350, speed: 58, dir: -1 },
-      { x: 2755, y: GROUND_Y - 22, min: 2655, max: 2960, speed: 54, dir: 1 },
-      { x: 3230, y: GROUND_Y - 22, min: 3110, max: 3440, speed: 64, dir: -1 },
-    ],
-    hazards: [
-      { x: 910, y: GROUND_Y - 10, w: 66, h: 10, phase: 0.2 },
-      { x: 1406, y: GROUND_Y - 10, w: 66, h: 10, phase: 1.1 },
-      { x: 2525, y: GROUND_Y - 10, w: 66, h: 10, phase: 0.65 },
-      { x: 3155, y: GROUND_Y - 10, w: 66, h: 10, phase: 1.5 },
-    ],
-  };
+  const levelTemplates = [
+    {
+      title: "MONTPELLIER RUN",
+      background: "level1",
+      atlas: "level1",
+      enemyKind: "rat",
+      platforms: [
+        { x: 0, y: GROUND_Y, w: WORLD_W, h: 86, kind: "ground" },
+        { x: 670, y: 306, w: 150, h: 18, kind: "ledge" },
+        { x: 1188, y: 294, w: 180, h: 18, kind: "ledge" },
+        { x: 1760, y: 314, w: 118, h: 18, kind: "ledge" },
+        { x: 2280, y: 302, w: 166, h: 18, kind: "ledge" },
+        { x: 2910, y: 300, w: 190, h: 18, kind: "ledge" },
+      ],
+      coins: [
+        [248, 304], [374, 302], [520, 304], [690, 266], [746, 258], [805, 266],
+        [1012, 303], [1178, 256], [1241, 244], [1306, 256], [1510, 302], [1680, 302],
+        [1813, 276], [1994, 302], [2178, 302], [2306, 263], [2368, 255], [2432, 263],
+        [2624, 302], [2820, 302], [2944, 262], [3010, 252], [3076, 262], [3405, 302],
+      ],
+      enemies: [
+        { x: 575, y: GROUND_Y - 22, min: 510, max: 770, speed: 42, dir: 1 },
+        { x: 1050, y: GROUND_Y - 22, min: 960, max: 1245, speed: 54, dir: -1 },
+        { x: 1565, y: GROUND_Y - 22, min: 1460, max: 1700, speed: 46, dir: 1 },
+        { x: 2165, y: GROUND_Y - 22, min: 2050, max: 2350, speed: 58, dir: -1 },
+        { x: 2755, y: GROUND_Y - 22, min: 2655, max: 2960, speed: 54, dir: 1 },
+        { x: 3230, y: GROUND_Y - 22, min: 3110, max: 3440, speed: 64, dir: -1 },
+      ],
+      hazards: [
+        { x: 910, y: GROUND_Y - 10, w: 66, h: 10, phase: 0.2 },
+        { x: 1406, y: GROUND_Y - 10, w: 66, h: 10, phase: 1.1 },
+        { x: 2525, y: GROUND_Y - 10, w: 66, h: 10, phase: 0.65 },
+        { x: 3155, y: GROUND_Y - 10, w: 66, h: 10, phase: 1.5 },
+      ],
+    },
+    {
+      title: "JARDIN DES PLANTES",
+      background: "level2",
+      atlas: "level2",
+      enemyKind: "plant",
+      platforms: [
+        { x: 0, y: GROUND_Y, w: WORLD_W, h: 86, kind: "ground" },
+        { x: 610, y: 305, w: 170, h: 18, kind: "ledge" },
+        { x: 1080, y: 288, w: 210, h: 18, kind: "ledge" },
+        { x: 1620, y: 315, w: 130, h: 18, kind: "ledge" },
+        { x: 2190, y: 298, w: 190, h: 18, kind: "ledge" },
+        { x: 2865, y: 292, w: 210, h: 18, kind: "ledge" },
+      ],
+      coins: [
+        [238, 304], [356, 302], [510, 304], [636, 265], [704, 253], [772, 265],
+        [992, 302], [1104, 250], [1182, 240], [1260, 250], [1484, 302], [1662, 278],
+        [1732, 270], [1952, 302], [2162, 302], [2225, 258], [2312, 247], [2394, 258],
+        [2608, 302], [2818, 302], [2915, 252], [3002, 238], [3090, 252], [3418, 302],
+      ],
+      enemies: [
+        { kind: "plant", x: 570, y: GROUND_Y - 46, w: 42, h: 44, min: 500, max: 760, speed: 38, dir: 1 },
+        { kind: "plant", x: 1170, y: GROUND_Y - 46, w: 42, h: 44, min: 1010, max: 1325, speed: 46, dir: -1 },
+        { kind: "plant", x: 1810, y: GROUND_Y - 46, w: 42, h: 44, min: 1660, max: 1945, speed: 42, dir: 1 },
+        { kind: "plant", x: 2500, y: GROUND_Y - 46, w: 42, h: 44, min: 2320, max: 2680, speed: 52, dir: -1 },
+        { kind: "plant", x: 3190, y: GROUND_Y - 46, w: 42, h: 44, min: 3020, max: 3400, speed: 50, dir: 1 },
+      ],
+      hazards: [
+        { kind: "thorn", x: 875, y: GROUND_Y - 12, w: 74, h: 12, phase: 0.2 },
+        { kind: "thorn", x: 1450, y: GROUND_Y - 12, w: 74, h: 12, phase: 0.9 },
+        { kind: "thorn", x: 2510, y: GROUND_Y - 12, w: 74, h: 12, phase: 0.55 },
+        { kind: "thorn", x: 3290, y: GROUND_Y - 12, w: 74, h: 12, phase: 1.3 },
+      ],
+    },
+  ];
+
+  let activeLevelIndex = 0;
+
+  function currentLevelTemplate() {
+    return levelTemplates[activeLevelIndex] || levelTemplates[0];
+  }
+
+  function coinTotal() {
+    return currentLevelTemplate().coins.length;
+  }
 
   function cloneLevel() {
+    const template = currentLevelTemplate();
     return {
-      platforms: levelTemplate.platforms.map((platform) => ({ ...platform })),
-      coins: levelTemplate.coins.map(([x, y], index) => ({
+      platforms: template.platforms.map((platform) => ({ ...platform })),
+      coins: template.coins.map(([x, y], index) => ({
         id: index,
         x,
         y,
@@ -127,12 +177,13 @@
         taken: false,
         bob: index * 0.37,
       })),
-      enemies: levelTemplate.enemies.map((enemy, index) => ({
+      enemies: template.enemies.map((enemy, index) => ({
         id: index,
+        kind: enemy.kind || template.enemyKind,
         x: enemy.x,
         y: enemy.y,
-        w: 42,
-        h: 22,
+        w: enemy.w || 42,
+        h: enemy.h || 22,
         min: enemy.min,
         max: enemy.max,
         speed: enemy.speed,
@@ -140,7 +191,7 @@
         alive: true,
         defeatTime: 0,
       })),
-      hazards: levelTemplate.hazards.map((hazard) => ({ ...hazard })),
+      hazards: template.hazards.map((hazard) => ({ ...hazard })),
     };
   }
 
@@ -164,8 +215,11 @@
     run: loadGeneratedImage("assets/generated/givros-run-cycle.png"),
     atlas: loadGeneratedImage("assets/generated/promenade-atlas.png"),
     finishGate: loadGeneratedImage("assets/generated/montpellier-finish-gate.png"),
+    level2Background: loadGeneratedImage("assets/generated/jardin-level2-bg.png"),
+    level2Atlas: loadGeneratedImage("assets/generated/jardin-level2-atlas.png"),
+    plantMonster: loadGeneratedImage("assets/generated/jardin-monster.png"),
   };
-  window.__GIVROS_BUILD = "gpt-assets-20260427-10";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-11";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -235,6 +289,10 @@
     }
     resetGame(true);
   });
+  nextLevelButton.addEventListener("click", () => {
+    activeLevelIndex = Math.min(activeLevelIndex + 1, levelTemplates.length - 1);
+    resetGame(true);
+  });
   window.addEventListener("resize", queueFitGameShell);
   window.addEventListener("orientationchange", queueFitGameShell);
   window.visualViewport?.addEventListener("resize", queueFitGameShell);
@@ -301,6 +359,7 @@
     state.lastFrame = performance.now();
     createHearts();
     updateHud();
+    nextLevelButton.classList.add("hidden");
     if (showStart) {
       showStartScreen();
     } else {
@@ -406,7 +465,7 @@
     updateEnemyCollisions();
     updateCamera();
 
-    if (player.x > FINISH_X + 104 && player.coins >= COIN_TOTAL) {
+    if (player.x > FINISH_X + 104 && player.coins >= coinTotal()) {
       endRun(true);
     }
 
@@ -554,22 +613,25 @@
     }
     updateHud();
     statusSubtitle.innerHTML = makeResultMarkup(won);
+    nextLevelButton.classList.toggle("hidden", !won || activeLevelIndex >= levelTemplates.length - 1);
     restartButton.textContent = "RESTART";
     restartButton.classList.remove("hidden");
     statusBanner.classList.remove("hidden");
   }
 
   function showStartScreen() {
-    statusTitle.textContent = "MONTPELLIER RUN";
+    const template = currentLevelTemplate();
+    statusTitle.textContent = template.title;
     statusSubtitle.innerHTML = `
       <div class="start-rules">
         <p>Speedrun challenge: finish as fast as possible.</p>
-        <p>Collect every coin. The gate appears only at ${COIN_TOTAL}/${COIN_TOTAL}.</p>
+        <p>Collect every coin. The gate appears only at ${coinTotal()}/${coinTotal()}.</p>
         <p>Damage penalty: +1s.</p>
         <p>Move: Arrows / A D</p>
         <p>Jump: Space / W / Up</p>
       </div>
     `;
+    nextLevelButton.classList.add("hidden");
     restartButton.textContent = "START";
     restartButton.classList.remove("hidden");
     statusBanner.classList.remove("hidden");
@@ -595,7 +657,7 @@
       heartHost.children[i].classList.toggle("empty", i >= player.health);
     }
     energyBar.style.width = clamp(player.energy, 0, 100).toFixed(0) + "%";
-    coinCount.textContent = "x" + String(player.coins).padStart(2, "0") + "/" + String(COIN_TOTAL).padStart(2, "0");
+    coinCount.textContent = "x" + String(player.coins).padStart(2, "0") + "/" + String(coinTotal()).padStart(2, "0");
     timeLeft.textContent = formatTime(state.time);
     scoreValue.textContent = padScore(player.score, 7);
 
@@ -644,7 +706,7 @@
   }
 
   function drawGeneratedBackdrop(cameraX) {
-    const asset = generatedAssets.background;
+    const asset = currentLevelTemplate().background === "level2" ? generatedAssets.level2Background : generatedAssets.background;
     if (!isDrawableImage(asset.image)) {
       return false;
     }
@@ -686,7 +748,7 @@
 
   function drawGeneratedGameplaySurfaces(cameraX) {
     drawGeneratedForegroundProps(cameraX);
-    if (state.player.coins >= COIN_TOTAL) {
+    if (state.player.coins >= coinTotal()) {
       drawFinishGate(FINISH_X - cameraX, GROUND_Y - 183);
     }
 
@@ -698,7 +760,16 @@
   }
 
   function drawGeneratedForegroundProps(cameraX) {
-    const props = [
+    const props = activeLevelIndex === 1 ? [
+      ["jardinPergola", 42, GROUND_Y - 132, 170, 132],
+      ["jardinLamp", 330, GROUND_Y - 176, 86, 174],
+      ["jardinBench", 730, GROUND_Y - 42, 150, 40],
+      ["jardinFountain", 1395, GROUND_Y - 120, 146, 118],
+      ["jardinCypress", 1975, GROUND_Y - 202, 82, 202],
+      ["jardinPalm", 2470, GROUND_Y - 210, 125, 210],
+      ["jardinRailing", 2810, GROUND_Y - 112, 190, 108],
+      ["jardinPlanter", 3270, GROUND_Y - 65, 112, 63],
+    ] : [
       ["banner", 58, GROUND_Y - 168, 130, 166],
       ["planter", 52, GROUND_Y - 58, 104, 54],
       ["planter", 192, GROUND_Y - 58, 104, 54],
@@ -721,11 +792,20 @@
   }
 
   function drawAtlasProp(name, x, y, w, h) {
-    const asset = generatedAssets.atlas;
+    const asset = currentLevelTemplate().atlas === "level2" ? generatedAssets.level2Atlas : generatedAssets.atlas;
     if (!isDrawableImage(asset.image)) {
       return false;
     }
-    const frames = {
+    const frames = activeLevelIndex === 1 ? {
+      jardinPergola: [760, 350, 210, 250],
+      jardinLamp: [1280, 642, 210, 300],
+      jardinBench: [1030, 755, 270, 95],
+      jardinFountain: [780, 575, 280, 220],
+      jardinCypress: [1118, 150, 140, 430],
+      jardinPalm: [1260, 160, 250, 430],
+      jardinRailing: [750, 170, 285, 135],
+      jardinPlanter: [290, 648, 240, 100],
+    } : {
       banner: [36, 458, 256, 300],
       lamp: [330, 448, 260, 300],
       trash: [620, 474, 165, 268],
@@ -741,7 +821,7 @@
   }
 
   function drawGeneratedLedge(x, y, w, h) {
-    const asset = generatedAssets.atlas;
+    const asset = currentLevelTemplate().atlas === "level2" ? generatedAssets.level2Atlas : generatedAssets.atlas;
     const sx = Math.round(x);
     if (isDrawableImage(asset.image)) {
       drawAtlasPlatform(sx, y, w);
@@ -749,11 +829,11 @@
   }
 
   function drawAtlasPlatform(x, y, w) {
-    const asset = generatedAssets.atlas;
+    const asset = currentLevelTemplate().atlas === "level2" ? generatedAssets.level2Atlas : generatedAssets.atlas;
     if (!isDrawableImage(asset.image)) {
       return false;
     }
-    const source = [30, 760, 420, 150];
+    const source = activeLevelIndex === 1 ? [40, 40, 270, 115] : [30, 760, 420, 150];
     const tileW = 70;
     const tileH = 28;
     for (let dx = 0; dx < w; dx += tileW) {
@@ -1491,7 +1571,18 @@
     if (!isHazardActive(hazard)) {
       return false;
     }
+    if (hazard.kind === "thorn") {
+      return drawGeneratedThorn(hazard, x);
+    }
     return drawGeneratedSteam(hazard, x);
+  }
+
+  function drawGeneratedThorn(hazard, x) {
+    const asset = generatedAssets.level2Atlas;
+    if (!isDrawableImage(asset.image)) {
+      return false;
+    }
+    return drawGeneratedFrame(asset.image, 720, 900, 330, 92, x - 6, hazard.y - 30, hazard.w + 12, 44, false);
   }
 
   function drawGeneratedSteam(hazard, x) {
@@ -1562,6 +1653,33 @@
     );
   }
 
+  function drawGeneratedPlantMonster(enemy, x, frame) {
+    const asset = generatedAssets.plantMonster;
+    if (!isDrawableImage(asset.image)) {
+      return false;
+    }
+    const frames = [
+      [88, 780, 300, 360],
+      [470, 780, 330, 360],
+      [875, 790, 330, 330],
+    ];
+    const source = frames[frame] || frames[0];
+    const destW = enemy.alive ? 78 : 72;
+    const destH = enemy.alive ? 78 : 58;
+    return drawGeneratedFrame(
+      asset.image,
+      source[0],
+      source[1],
+      source[2],
+      source[3],
+      x - 18,
+      enemy.alive ? enemy.y - 29 : enemy.y - 6,
+      destW,
+      destH,
+      enemy.dir > 0,
+    );
+  }
+
   function drawEnemies(cameraX, generatedScene) {
     for (const enemy of state.level.enemies) {
       const x = Math.round(enemy.x - cameraX);
@@ -1572,8 +1690,12 @@
         continue;
       }
       const frame = enemy.alive ? Math.floor(state.elapsed * 7 + enemy.id) % 2 : 2;
-      drawGroundShadow(x + 21, enemy.y + 25, enemy.alive ? 36 : 26, 6, 0.28);
-      if (!drawGeneratedRat(enemy, x, enemy.alive ? frame : 3)) {
+      const isPlant = enemy.kind === "plant";
+      drawGroundShadow(x + 21, enemy.y + (isPlant ? 47 : 25), isPlant ? 42 : enemy.alive ? 36 : 26, 6, 0.28);
+      const drewEnemy = isPlant
+        ? drawGeneratedPlantMonster(enemy, x, enemy.alive ? frame : 2)
+        : drawGeneratedRat(enemy, x, enemy.alive ? frame : 3);
+      if (!drewEnemy) {
         if (generatedScene) {
           continue;
         }
@@ -1713,11 +1835,11 @@
   }
 
   function drawFinishGate(x, y) {
-    const asset = generatedAssets.finishGate;
+    const asset = activeLevelIndex === 1 ? generatedAssets.level2Atlas : generatedAssets.finishGate;
     const sx = Math.round(x);
-    const sy = Math.round(y);
-    const w = 216;
-    const h = 183;
+    const sy = Math.round(activeLevelIndex === 1 ? GROUND_Y - 166 : y);
+    const w = activeLevelIndex === 1 ? 132 : 216;
+    const h = activeLevelIndex === 1 ? 166 : 183;
     if (sx < -w - 20 || sx > VIEW_W + 20) {
       return;
     }
@@ -1725,7 +1847,11 @@
     if (!isDrawableImage(asset.image)) {
       return;
     }
-    drawGroundShadow(sx + w / 2, GROUND_Y + 3, 188, 10, 0.32);
+    drawGroundShadow(sx + w / 2, GROUND_Y + 3, activeLevelIndex === 1 ? 92 : 188, 10, 0.32);
+    if (activeLevelIndex === 1) {
+      drawGeneratedFrame(asset.image, 555, 330, 190, 295, sx, sy, w, h, false);
+      return;
+    }
     drawGeneratedFrame(asset.image, 0, 0, asset.image.width, asset.image.height, sx, sy, w, h, false);
   }
 

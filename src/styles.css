@@ -375,6 +375,12 @@ button {
   display: none;
 }
 
+.status-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
 #status-title {
   font-size: 32px;
   font-weight: 900;

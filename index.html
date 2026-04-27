@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Givros: Montpellier Run</title>
-    <link rel="stylesheet" href="src/styles.css?v=gpt-assets-20260427-10" />
+    <link rel="stylesheet" href="src/styles.css?v=gpt-assets-20260427-11" />
   </head>
   <body>
     <main id="game-shell">
@@ -58,7 +58,10 @@
             <p>Jump: Space / W / Up</p>
           </div>
         </div>
-        <button id="restart-button" class="pixel-button" type="button">START</button>
+        <div class="status-actions">
+          <button id="next-level-button" class="pixel-button hidden" type="button">NEXT LEVEL</button>
+          <button id="restart-button" class="pixel-button" type="button">START</button>
+        </div>
       </div>
 
       <div class="touch-controls" aria-label="Mobile controls">
@@ -77,6 +80,6 @@
       </div>
     </main>
 
-    <script src="src/game.js?v=gpt-assets-20260427-10" defer></script>
+    <script src="src/game.js?v=gpt-assets-20260427-11" defer></script>
   </body>
 </html>
