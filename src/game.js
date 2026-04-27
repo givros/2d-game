@@ -40,7 +40,6 @@
     left: false,
     right: false,
     jump: false,
-    attack: false,
   };
 
   const palettes = {
@@ -166,7 +165,7 @@
     atlas: loadGeneratedImage("assets/generated/promenade-atlas.png"),
     finishGate: loadGeneratedImage("assets/generated/montpellier-finish-gate.png"),
   };
-  window.__GIVROS_BUILD = "gpt-assets-20260427-7";
+  window.__GIVROS_BUILD = "gpt-assets-20260427-8";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -336,7 +335,7 @@
     const movingLeft = keys.has("ArrowLeft") || keys.has("KeyA") || touch.left;
     const movingRight = keys.has("ArrowRight") || keys.has("KeyD") || touch.right;
     const wantsJump = pressed.has("ArrowUp") || pressed.has("KeyW") || pressed.has("Space") || pressed.has("Touchjump");
-    const wantsAttack = pressed.has("KeyJ") || pressed.has("KeyK") || pressed.has("KeyX") || pressed.has("Touchattack");
+    const wantsAttack = pressed.has("KeyJ") || pressed.has("KeyK") || pressed.has("KeyX");
 
     let direction = 0;
     if (movingLeft) direction -= 1;

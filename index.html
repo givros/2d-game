@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Givros: Montpellier Run</title>
-    <link rel="stylesheet" href="src/styles.css?v=gpt-assets-20260427-7" />
+    <link rel="stylesheet" href="src/styles.css?v=gpt-assets-20260427-8" />
   </head>
   <body>
     <main id="game-shell">
@@ -30,7 +30,7 @@
           <div class="hud-label">TIME</div>
           <div class="timer-line">
             <span class="clock-icon" aria-hidden="true"></span>
-            <span id="time-left">298</span>
+            <span id="time-left">00:00.00</span>
           </div>
         </section>
 
@@ -68,11 +68,15 @@
         </div>
         <div class="touch-actions">
           <button class="touch-button touch-jump" data-control="jump" type="button" aria-label="Jump"></button>
-          <button class="touch-button touch-attack" data-control="attack" type="button" aria-label="Action"></button>
         </div>
+      </div>
+
+      <div class="orientation-warning" role="status" aria-live="polite">
+        <div>ROTATE YOUR PHONE</div>
+        <p>Landscape mode is required to play.</p>
       </div>
     </main>
 
-    <script src="src/game.js?v=gpt-assets-20260427-7" defer></script>
+    <script src="src/game.js?v=gpt-assets-20260427-8" defer></script>
   </body>
 </html>

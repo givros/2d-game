@@ -24,24 +24,19 @@ function loadPlaywrightTest() {
 
 const { test, expect } = loadPlaywrightTest();
 
-test("captures the new run cycle in motion", async ({ page }) => {
-  const errors = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  page.on("console", (message) => {
-    if (message.type() === "error") {
-      errors.push(message.text());
-    }
-  });
+test.use({
+  viewport: { width: 430, height: 932 },
+  isMobile: true,
+  hasTouch: true,
+});
 
+test("asks portrait mobile players to rotate to landscape", async ({ page }) => {
   await page.goto("file:///E:/Dev/2d-game/index.html");
   await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-8");
-  await page.getByRole("button", { name: "START" }).click();
-  await page.waitForTimeout(3300);
-  await page.waitForTimeout(500);
-  await page.keyboard.down("ArrowRight");
-  await page.waitForTimeout(850);
-  await page.screenshot({ path: "output/playwright/run-cycle-active.png" });
-  await page.keyboard.up("ArrowRight");
 
-  expect(errors).toEqual([]);
+  await expect(page.getByText("ROTATE YOUR PHONE")).toBeVisible();
+  await expect(page.getByText("Landscape mode is required to play.")).toBeVisible();
+
+  const screenshot = await page.screenshot({ path: "output/playwright/portrait-warning.png" });
+  expect(screenshot.length).toBeGreaterThan(1000);
 });

@@ -25,7 +25,7 @@ function loadPlaywrightTest() {
 const { test, expect } = loadPlaywrightTest();
 
 test.use({
-  viewport: { width: 430, height: 932 },
+  viewport: { width: 932, height: 430 },
   isMobile: true,
   hasTouch: true,
 });
@@ -40,12 +40,12 @@ test("mobile controls are visible and drive the player", async ({ page }) => {
   });
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-7");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-8");
 
   await expect(page.getByRole("button", { name: "Move left" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Move right" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Jump" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Action" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Action" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "START" }).tap();
   await page.waitForTimeout(3300);
