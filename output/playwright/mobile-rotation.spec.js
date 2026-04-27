@@ -32,7 +32,7 @@ test.use({
 
 test("stays pinned after repeated mobile rotations", async ({ page }) => {
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-11");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-12");
 
   for (const size of [
     { width: 430, height: 932 },

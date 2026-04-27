@@ -32,7 +32,7 @@ test.use({
 
 test("asks portrait mobile players to rotate to landscape", async ({ page }) => {
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-11");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-12");
 
   await expect(page.getByText("ROTATE YOUR PHONE")).toBeVisible();
   await expect(page.getByText("Landscape mode is required to play.")).toBeVisible();

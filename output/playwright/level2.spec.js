@@ -34,7 +34,7 @@ test("loads the Jardin des plantes second level", async ({ page }) => {
   });
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-11");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-12");
   await page.evaluate(() => document.getElementById("next-level-button").click());
 
   await expect(page.getByText("JARDIN DES PLANTES")).toBeVisible();
