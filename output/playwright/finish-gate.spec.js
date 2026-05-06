@@ -34,11 +34,11 @@ test("keeps the finish gate hidden until every coin is collected", async ({ page
   });
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
-  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260427-16");
+  await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260506-1");
   await page.getByRole("button", { name: "START" }).click();
   await page.waitForTimeout(3300);
   await page.keyboard.down("ArrowRight");
-  await page.waitForTimeout(16500);
+  await page.waitForTimeout(8500);
   await page.keyboard.up("ArrowRight");
   const result = await page.evaluate(() => ({
     coins: document.getElementById("coin-count").textContent,

@@ -11,6 +11,7 @@
       level2Background: loadGeneratedImage("assets/generated/jardin-level2-bg.png"),
       level2Atlas: loadGeneratedImage("assets/generated/jardin-level2-atlas.png"),
       plantMonster: loadGeneratedImage("assets/generated/jardin-monster.png"),
+      level3Background: loadGeneratedImage("assets/generated/paris-level3-bg.png"),
     };
   }
 

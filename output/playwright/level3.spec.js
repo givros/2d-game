@@ -24,13 +24,7 @@ function loadPlaywrightTest() {
 
 const { test, expect } = loadPlaywrightTest();
 
-test.use({
-  viewport: { width: 932, height: 430 },
-  isMobile: true,
-  hasTouch: true,
-});
-
-test("mobile controls are visible and drive the player", async ({ page }) => {
+test("loads the Paris third level", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
@@ -41,46 +35,28 @@ test("mobile controls are visible and drive the player", async ({ page }) => {
 
   await page.goto("file:///E:/Dev/2d-game/index.html");
   await page.waitForFunction(() => window.__GIVROS_BUILD === "gpt-assets-20260506-1");
+  await page.evaluate(() => {
+    document.getElementById("next-level-button").click();
+    document.getElementById("next-level-button").click();
+  });
 
-  await expect(page.getByRole("button", { name: "Move left" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Move right" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Jump" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Action" })).toHaveCount(0);
-
-  await page.getByRole("button", { name: "START" }).tap();
+  await expect(page.getByText("PARIS FINAL RUN")).toBeVisible();
+  await page.getByRole("button", { name: "START" }).click();
   await page.waitForTimeout(3300);
-
-  const right = page.getByRole("button", { name: "Move right" });
-  const rightBox = await right.boundingBox();
-  expect(rightBox).not.toBeNull();
-  await page.mouse.move(rightBox.x + rightBox.width / 2, rightBox.y + rightBox.height / 2);
-  await page.mouse.down();
-  await page.waitForTimeout(1500);
-  await page.mouse.up();
-
-  await page.getByRole("button", { name: "Jump" }).tap();
-  await page.waitForTimeout(300);
+  await page.keyboard.down("ArrowRight");
+  await page.waitForTimeout(1200);
+  await page.keyboard.up("ArrowRight");
 
   const result = await page.evaluate(() => ({
     coins: document.getElementById("coin-count").textContent,
     time: document.getElementById("time-left").textContent,
     bannerHidden: document.getElementById("status-banner").classList.contains("hidden"),
-    shell: {
-      left: Math.round(document.getElementById("game-shell").getBoundingClientRect().left),
-      top: Math.round(document.getElementById("game-shell").getBoundingClientRect().top),
-      width: Math.round(document.getElementById("game-shell").getBoundingClientRect().width),
-      height: Math.round(document.getElementById("game-shell").getBoundingClientRect().height),
-    },
   }));
-  const screenshot = await page.screenshot({ path: "output/playwright/mobile-controls.png" });
+  const screenshot = await page.screenshot({ path: "output/playwright/level3-paris.png" });
 
   expect(errors).toEqual([]);
   expect(screenshot.length).toBeGreaterThan(1000);
   expect(result.coins).toMatch(/^x\d{2}\/24$/);
   expect(result.time).toMatch(/^\d{2}:\d{2}\.\d{2}$/);
   expect(result.bannerHidden).toBe(true);
-  expect(result.shell.left).toBe(0);
-  expect(result.shell.top).toBe(0);
-  expect(result.shell.width).toBe(932);
-  expect(result.shell.height).toBe(430);
 });

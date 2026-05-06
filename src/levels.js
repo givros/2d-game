@@ -5,6 +5,7 @@
     return [
       window.GivrosLevel1.createLevel(context),
       window.GivrosLevel2.createLevel(context),
+      window.GivrosLevel3.createLevel(context),
     ];
   }
 

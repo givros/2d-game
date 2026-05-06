@@ -152,7 +152,7 @@
 
   const sprites = buildSprites();
   const generatedAssets = window.GivrosAssets.createGeneratedAssets(loadGeneratedImage);
-  window.__GIVROS_BUILD = "gpt-assets-20260427-16";
+  window.__GIVROS_BUILD = "gpt-assets-20260506-1";
   fitGameShell();
   showStartScreen();
   drawPortrait();
@@ -639,7 +639,7 @@
   }
 
   function drawGeneratedBackdrop(cameraX) {
-    const asset = currentLevelTemplate().background === "level2" ? generatedAssets.level2Background : generatedAssets.background;
+    const asset = getBackgroundAsset();
     if (!isDrawableImage(asset.image)) {
       return false;
     }
@@ -657,6 +657,17 @@
       return false;
     }
     return true;
+  }
+
+  function getBackgroundAsset() {
+    const background = currentLevelTemplate().background;
+    if (background === "level3") {
+      return generatedAssets.level3Background;
+    }
+    if (background === "level2") {
+      return generatedAssets.level2Background;
+    }
+    return generatedAssets.background;
   }
 
   function getPixelBackdrop(asset) {
@@ -703,7 +714,7 @@
   }
 
   function drawAtlasProp(name, x, y, w, h) {
-    const asset = currentLevelTemplate().atlas === "level2" ? generatedAssets.level2Atlas : generatedAssets.atlas;
+    const asset = getAtlasAsset();
     if (!isDrawableImage(asset.image)) {
       return false;
     }
@@ -731,7 +742,7 @@
   }
 
   function drawGeneratedLedge(x, y, w, h) {
-    const asset = currentLevelTemplate().atlas === "level2" ? generatedAssets.level2Atlas : generatedAssets.atlas;
+    const asset = getAtlasAsset();
     const sx = Math.round(x);
     if (isDrawableImage(asset.image)) {
       drawAtlasPlatform(sx, y, w);
@@ -739,7 +750,7 @@
   }
 
   function drawAtlasPlatform(x, y, w) {
-    const asset = currentLevelTemplate().atlas === "level2" ? generatedAssets.level2Atlas : generatedAssets.atlas;
+    const asset = getAtlasAsset();
     if (!isDrawableImage(asset.image)) {
       return false;
     }
@@ -762,6 +773,10 @@
       );
     }
     return true;
+  }
+
+  function getAtlasAsset() {
+    return currentLevelTemplate().atlas === "level2" ? generatedAssets.level2Atlas : generatedAssets.atlas;
   }
 
   function drawSky(cameraX) {
